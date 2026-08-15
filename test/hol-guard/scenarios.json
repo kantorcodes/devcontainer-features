@@ -1,0 +1,13 @@
+{
+  "pinned": {
+    "image": "mcr.microsoft.com/devcontainers/python:1-3.13-bookworm",
+    "features": {
+      "hol-guard": {
+        "version": "2.2.88",
+        "initHarness": "none",
+        "strictMode": false
+      }
+    },
+    "remoteUser": "vscode"
+  }
+}
