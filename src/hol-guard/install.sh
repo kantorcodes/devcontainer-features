@@ -104,10 +104,23 @@ else
         --upgrade "hol-guard==$VERSION"
 fi
 
-for command_name in hol-guard plugin-scanner plugin-guard plugin-ecosystem-scanner; do
-    command_path="$INSTALL_DIR/bin/$command_name"
-    [ -x "$command_path" ] || fail "Expected installed command is missing: $command_name"
-    ln -sfn "$command_path" "/usr/local/bin/$command_name"
+primary_command="$INSTALL_DIR/bin/hol-guard"
+[ -x "$primary_command" ] || fail 'The installed HOL Guard package did not expose the hol-guard command.'
+ln -sfn "$primary_command" /usr/local/bin/hol-guard
+
+# Older and transitional releases have not always emitted every compatibility
+# console script into their wheel, even though those names dispatch to the same
+# CLI. Preserve the documented command surface by using a packaged executable
+# when present and otherwise aliasing the verified primary command.
+for command_name in plugin-scanner plugin-guard plugin-ecosystem-scanner; do
+    packaged_command="$INSTALL_DIR/bin/$command_name"
+    if [ -x "$packaged_command" ]; then
+        target="$packaged_command"
+    else
+        target="$primary_command"
+        log "Normalizing compatibility command '$command_name' to hol-guard."
+    fi
+    ln -sfn "$target" "/usr/local/bin/$command_name"
 done
 
 # Installation is deliberately side-effect free by default. Only modify the
@@ -124,6 +137,8 @@ fi
 
 hol-guard --help >/dev/null
 plugin-scanner --help >/dev/null
+plugin-guard --help >/dev/null
+plugin-ecosystem-scanner --help >/dev/null
 "$INSTALL_DIR/bin/python" -c 'import codex_plugin_scanner, magika, onnxruntime'
 
 log 'HOL Guard installed successfully.'
