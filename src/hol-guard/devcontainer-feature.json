@@ -1,0 +1,42 @@
+{
+  "name": "HOL Guard",
+  "id": "hol-guard",
+  "version": "1.1.0",
+  "description": "Installs HOL Guard, a local-first security layer for AI coding agents and agent supply chains.",
+  "documentationURL": "https://hol.org/guard/security",
+  "licenseURL": "https://github.com/hashgraph-online/hol-guard/blob/main/LICENSE",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": [
+        "latest",
+        "2.2.88"
+      ],
+      "default": "latest",
+      "description": "HOL Guard release to install. Use latest or an exact PEP 440 version."
+    },
+    "initHarness": {
+      "type": "string",
+      "enum": [
+        "none",
+        "auto",
+        "codex",
+        "claude-code",
+        "cursor",
+        "gemini",
+        "opencode",
+        "pi"
+      ],
+      "default": "none",
+      "description": "Initialize HOL Guard for the Dev Container user. The CLI detects installed harnesses; named values document intent. Use none for a side-effect-free install."
+    },
+    "strictMode": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable strict security mode for the Dev Container user."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/python"
+  ]
+}
