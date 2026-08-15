@@ -10,7 +10,8 @@ check "Ecosystem scanner command is available" plugin-ecosystem-scanner --help
 check "System installation exists" test -x /usr/local/share/hol-guard/bin/python
 check "Scanner runtime imports" /usr/local/share/hol-guard/bin/python -c \
     "import codex_plugin_scanner, magika, onnxruntime"
-check "Commands resolve to the feature installation" bash -c \
-    "test \"$(readlink -f \"$(command -v hol-guard)\")\" = /usr/local/share/hol-guard/bin/hol-guard"
+check "Primary command symlink exists" test -L /usr/local/bin/hol-guard
+check "Primary command targets the feature installation" bash -c \
+    'test "$(readlink /usr/local/bin/hol-guard)" = /usr/local/share/hol-guard/bin/hol-guard'
 
 reportResults
